@@ -1,0 +1,251 @@
+#include <iostream>
+#include<stdlib.h>
+#include<conio.h>
+using namespace std;
+int arr[10][10]={0},x,y,val,flag,max1,n=3;
+int  checkpoint()
+{
+   max1=0;
+    int i,j,count1=0;
+    for(i=0;i<n;i++)
+   {
+    for(j=0;j<n;j++)
+    {
+      if(arr[i][j]!=0)
+            count1++;
+      if(arr[i][j]>max1)
+        max1=arr[i][j];
+    }
+   }
+ if(count1==n*n)
+   return 1;
+ else if(max1==2048)
+    return 2;
+ else
+    return 0;
+}
+
+void random_location_and_value()
+{
+    label2:
+  {
+    x=rand()%n;
+    y=rand()%n;
+  }
+    label1:
+     val=rand()%5;
+    if(val==0 || val==1 || val==3)
+      goto label1;
+    if(arr[x][y]!=0)
+        goto label2;
+    else
+        arr[x][y]=val;
+
+}
+void status()
+{
+    int i,j;
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            if(i==x && j==y)
+              arr[i][j]=val;
+        }
+    }
+
+
+}
+void display()
+{
+    int i,j;
+    for(i=0;i<n;i++)
+     {
+         for(j=0;j<n;j++)
+            cout<<"  "<<arr[i][j];
+         cout<<endl<<endl;
+     }
+}
+void input()
+{
+    flag=0;
+    char ch;
+    if(kbhit())
+    {
+
+        ch=getch();
+        switch(ch)
+        {
+        case 'w':
+            flag=1;
+            break;
+        case 's':
+            flag=2;
+            break;
+        case 'a':
+            flag=3;
+            break;
+        case 'd':
+            flag=4;
+            break;
+        }
+    }
+}
+void movement()
+{
+    int i,j,k,c=0;
+    switch(flag)
+  {
+    case 1:
+        for(j=0;j<n;j++)
+        {
+          for(i=1;i<n;i++)
+          {
+                  for(k=i;k>=1;k--)
+                  {
+
+                    if(arr[k-1][j]==0 && arr[k][j]!=0)
+                    {
+                     arr[k-1][j]=arr[k][j];
+                     arr[k][j]=0;
+                     c=1;
+                    }
+                    if(arr[k-1][j]==arr[k][j] && arr[k][j]!=0)
+                      {
+                          arr[k-1][j]=2*arr[k][j];
+                          arr[k][j]=0;
+                          c=1;
+                          break;
+                      }
+                    if(arr[k-1][j]!=arr[k][j] &&arr[k-1][j]!=0 && arr[k][j]!=0)
+                        break;
+                  }
+
+          }
+        }
+        break;
+    case 2:
+        for(j=0;j<n;j++)
+        {
+          for(i=n-2;i>=1;i--)
+          {
+                  for(k=i;k<=n-1;k++)
+                  {
+
+                    if(arr[k][j]==0 && arr[k-1][j]!=0)
+                    {
+                     arr[k][j]=arr[k-1][j];
+                     arr[k-1][j]=0;
+                     c=1;
+                    }
+                    if(arr[k][j]==arr[k-1][j] && arr[k-1][j]!=0)
+                      {
+                          arr[k][j]=2*arr[k-1][j];
+                          arr[k-1][j]=0;
+                          c=1;
+                          break;
+                      }
+                    if(arr[k][j]!=arr[k-1][j] &&arr[k][j]!=0 && arr[k-1][j]!=0)
+                        break;
+                  }
+
+          }
+        }
+        break;
+    case 3:
+        for(i=0;i<n;i++)
+        {
+          for(j=1;j<n;j++)
+          {
+                  for(k=j;k>=1;k--)
+                  {
+
+                    if(arr[i][k-1]==0 && arr[i][k]!=0)
+                    {
+                     arr[i][k-1]=arr[i][k];
+                     arr[i][k]=0;
+                     c=1;
+                    }
+                    if(arr[i][k-1]==arr[i][k] && arr[i][k]!=0)
+                      {
+                          arr[i][k-1]=2*arr[i][k];
+                          arr[i][k]=0;
+                          c=1;
+                          break;
+                      }
+                    if(arr[i][k-1]!=arr[i][k] &&arr[i][k-1]!=0 && arr[i][k]!=0)
+                        break;
+                  }
+
+          }
+        }
+        break;
+    case 4:
+     for(i=0;i<n;i++)
+        {
+          for(j=n-1;j>=1;j--)
+          {
+                  for(k=j;k<=n-1;k++)
+                  {
+
+                    if(arr[i][k]==0 && arr[i][k-1]!=0)
+                    {
+                     arr[i][k]=arr[i][k-1];
+                     arr[i][k-1]=0;
+                     c=1;
+                    }
+                    if(arr[i][k]==arr[i][k-1] && arr[i][k-1]!=0)
+                      {
+                          arr[i][k]=2*arr[i][k-1];
+                          arr[i][k-1]=0;
+                          c=1;
+                          break;
+                      }
+                    if(arr[i][k-1]!=arr[i][k] &&arr[i][k-1]!=0 && arr[i][k]!=0)
+                        break;
+                  }
+
+          }
+        }
+        break;
+
+}
+if(c==1)
+    random_location_and_value();
+
+}
+
+
+int main()
+{
+    cout<<"<WELCOME TO 2048\nENTER THE SIZE OF MATRIX:>"<<endl;
+    cin>>n;
+
+    random_location_and_value();
+     while(1)
+    {
+    status();
+    input();
+    movement();
+    display();
+    system("CLS");
+    if(checkpoint()==1)
+    {
+    cout<<"G_A_M_E O_V_E_R"<<endl;
+    cout<<"Y_O_U_R S_C_O_R_E ="<<max1<<endl;
+    getch();
+    break;
+
+    }
+    if(checkpoint()==2)
+    {
+        cout<<"CONGRATULATIONS YOU WIN"<<endl;
+        break;
+
+    }
+    }
+
+}
+
+
+
