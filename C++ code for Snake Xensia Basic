@@ -1,0 +1,155 @@
+#include <iostream>
+#include<conio.h>
+#include<stdlib.h>
+using namespace std;
+int width=25,height=10,score=0,food_x,food_y,snake_x,snake_y,flag,over;
+void food_location()
+{
+label1:
+ food_x=rand()%height;
+label2:
+  food_y=rand()%width;
+if(food_x==0)
+        goto label1;
+if(food_y==0)
+        goto label2;
+}
+void snake_location()
+{
+   label1:
+    snake_x=rand()%10;
+   label2:
+       snake_y=rand()%10;
+   if(snake_x==0)
+       goto label1;
+   if(snake_y==0)
+       goto label2;
+}
+void display()
+{
+ int i,j;
+  cout<<"\n";
+  cout<<"PRESS W-UP,S-DOWN,A=LEFT,D=RIGHT"<<endl;
+  for(i=0;i<=height;i++)
+  {
+
+      if(i==0 || i==height)
+        for(j=0;j<=width;j++)
+         cout<<"*";
+      else
+      {
+          for(j=0;j<=width;j++)
+          {
+             if(j==0 || j==width)
+                cout<<"*";
+
+             else if(i==food_x && j==food_y)
+                cout<<"F";
+             else if(i==snake_x && j==snake_y)
+                 cout<<"S";
+            else
+                cout<<" ";
+          }
+      }
+      cout<<"\n";
+  }
+      cout<<"SCORE="<<score;
+}
+void input()
+{
+    if(kbhit())
+    {
+        char ch=getch();
+        switch(ch)
+    {
+       case 'a':
+        flag=1;
+        break;
+     case 'd':
+        flag=2;
+        break;
+     case 'w':
+        flag=3;
+        break;
+     case 's':
+        flag=4;
+        break;
+    }}
+    }
+void points()
+{
+    if(snake_x==food_x && snake_y==food_y)
+    {
+        score++;
+        food_location();
+    }
+}
+
+void movement()
+{
+    switch(flag)
+    {
+    case 1:
+        snake_y--;
+        break;
+    case 2:
+        snake_y++;
+        break;
+    case 3:
+        snake_x--;
+        break;
+    case 4:
+        snake_x++;
+        break;
+
+    }
+}
+void movement_recheck()
+{
+    if(snake_y<0)
+        snake_y=width-1;
+    if(snake_x<0)
+        snake_x=height-1;
+    if(snake_y>width)
+        snake_y=0;
+    if(snake_x>height)
+        snake_x=0;
+}
+int gameover()
+{
+    if(snake_x==height || snake_x==0)
+        over=1;
+    if(snake_y==width|| snake_y==0)
+        over=1;
+ return over;
+}
+
+int main()
+{
+   food_location();
+   snake_location();
+   over=0;
+   while(1)
+   {
+    system("CLS");
+    input();
+   movement();
+   display();
+   points();
+   if(gameover()==1)
+   {
+     system("CLS");
+     cout<<"GAME OVER"<<endl;
+     cout<<"YOUR SCORE: "<<score<<endl;
+     score=0;
+     getch();
+     cout<<"Press any key to continue"<<endl;
+     char ch=getch();
+     if (ch)
+        main();
+     break;
+   }
+   }
+
+    return 0;
+}
